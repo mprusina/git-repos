@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".details.ui.RepoDetailsFragment">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_margin="16dp"
+        app:civ_border_color="@android:color/darker_gray"
+        app:civ_border_width="1dp"
+        app:layout_constraintBottom_toTopOf="@id/created_at"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/owner_repo_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        app:layout_constraintEnd_toStartOf="@id/open_repo_url"
+        app:layout_constraintStart_toEndOf="@id/profile_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/open_repo_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
+        android:drawablePadding="4dp"
+        android:src="@drawable/open_url"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/owner_repo_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/default_branch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/profile_image"
+        app:layout_constraintTop_toBottomOf="@id/owner_repo_name" />
+
+    <TextView
+        android:id="@+id/language"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/profile_image"
+        app:layout_constraintTop_toBottomOf="@id/default_branch" />
+
+    <TextView
+        android:id="@+id/created_at"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/language" />
+
+    <TextView
+        android:id="@+id/updated_at"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/created_at" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/updated_at" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/details_loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/counts_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/counts_divider"
+        style="@style/horizontal_divider"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/description" />
+
+    <TextView
+        android:id="@+id/startgazer_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:drawablePadding="4dp"
+        android:textAlignment="center"
+        app:drawableTopCompat="@drawable/star"
+        app:layout_constraintEnd_toStartOf="@id/fork_count"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/counts_divider" />
+
+    <TextView
+        android:id="@+id/fork_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:drawablePadding="4dp"
+        android:textAlignment="center"
+        app:drawableTopCompat="@drawable/fork"
+        app:layout_constraintEnd_toStartOf="@id/open_issues_count"
+        app:layout_constraintStart_toEndOf="@id/startgazer_count"
+        app:layout_constraintTop_toBottomOf="@id/counts_divider" />
+
+    <TextView
+        android:id="@+id/open_issues_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:drawablePadding="4dp"
+        android:textAlignment="center"
+        app:drawableTopCompat="@drawable/issue"
+        app:layout_constraintEnd_toStartOf="@id/watcher_count"
+        app:layout_constraintStart_toEndOf="@id/fork_count"
+        app:layout_constraintTop_toBottomOf="@id/counts_divider" />
+
+    <TextView
+        android:id="@+id/watcher_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:drawablePadding="4dp"
+        android:textAlignment="center"
+        app:drawableTopCompat="@drawable/watcher"
+        app:layout_constraintEnd_toStartOf="@+id/favorite_divider"
+        app:layout_constraintStart_toEndOf="@id/open_issues_count"
+        app:layout_constraintTop_toBottomOf="@id/counts_divider" />
+
+    <View
+        android:id="@+id/favorite_divider"
+        style="@style/vertical_divider"
+        android:layout_margin="8dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/list_divider"
+        app:layout_constraintEnd_toStartOf="@id/favorite"
+        app:layout_constraintStart_toEndOf="@id/watcher_count"
+        app:layout_constraintTop_toBottomOf="@id/counts_divider" />
+
+    <ImageView
+        android:id="@+id/favorite"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:drawablePadding="4dp"
+        android:src="@drawable/favorite_no"
+        app:layout_constraintBottom_toTopOf="@id/list_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/favorite_divider"
+        app:layout_constraintTop_toBottomOf="@id/counts_divider" />
+
+    <View
+        android:id="@+id/list_divider"
+        style="@style/horizontal_divider"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/startgazer_count" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contributors_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/list_divider"
+        tools:listitem="@layout/fragment_repo_details_list_row" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/contributor_list_loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/list_divider"/>
+
+    <TextView
+        android:id="@+id/info_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="?android:attr/textColorPrimary"
+        android:visibility="gone"
+        android:text="@string/error_loading_data"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/list_divider" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
