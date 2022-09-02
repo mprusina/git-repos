@@ -2,8 +2,6 @@ package com.mprusina.gitrepo.di
 
 import android.content.Context
 import androidx.room.Room
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.mprusina.gitrepo.common.DatabaseRepository
 import com.mprusina.gitrepo.common.api.GitHubService
 import com.mprusina.gitrepo.common.db.GitHubDatabase
@@ -37,16 +35,12 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(gson: Gson): Retrofit {
+    fun providesRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
-    @Singleton
-    @Provides
-    fun providesGson(): Gson = GsonBuilder().create()
 
     @Singleton
     @Provides

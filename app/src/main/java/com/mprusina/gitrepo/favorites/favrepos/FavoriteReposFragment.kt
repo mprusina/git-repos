@@ -54,7 +54,5 @@ class FavoriteReposFragment : Fragment() {
         binding.infoMessage.isVisible = show
     }
 
-    private fun handleRepoFavoriteAction(repo: Repo) {
-        viewModel.removeRepoFromFavorites(repo)
-    }
+    private fun handleRepoFavoriteAction(repo: Repo) = viewModel.removeRepoFromFavorites(repo)
 }

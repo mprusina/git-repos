@@ -15,5 +15,5 @@ data class Repo(
     val forksCount: Int? = null,
     val openIssuesCount: Int? = null,
     val watchersCount: Int? = null,
-    var favorite: Boolean? = false
+    var favorite: Boolean = false
 )

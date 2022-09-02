@@ -17,7 +17,6 @@ interface ReposContract {
     interface Presenter {
         fun loadData() : Flow<PagingData<Repo>>
         fun searchRepos(query: String) : Flow<PagingData<Repo>>
-        fun saveToFavorites(repo: Repo)
-        fun removeFromFavorites(repo: Repo)
+        fun handleRepoFavoriteAction(repo: Repo)
     }
 }

@@ -8,7 +8,6 @@ import com.mprusina.gitrepo.common.model.Repo
 import com.mprusina.gitrepo.details.data.GitHubRepository
 import com.mprusina.gitrepo.details.data.model.RepoDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -60,37 +59,28 @@ class RepoDetailsViewModel @Inject constructor(private val gitHubRepository: Git
         }
     }
 
-    fun addContributorToFavorites(contributor: Contributor) {
-        contributor.favorite = true
-        viewModelScope.launch(Dispatchers.IO) {
-            dbRepository.saveContributorToFavorites(contributor)
+    fun handleContributorFavorites(contributor: Contributor) {
+        contributor.favorite = contributor.favorite != true
+        viewModelScope.launch {
+            if (contributor.favorite == true) {
+                dbRepository.saveContributorToFavorites(contributor)
+            } else {
+                dbRepository.deleteContributorFromFavorites(contributor)
+            }
         }
     }
 
-    fun removeContributorFromFavorites(contributor: Contributor) {
-        contributor.favorite = false
-        viewModelScope.launch(Dispatchers.IO) {
-            dbRepository.deleteContributorFromFavorites(contributor)
-        }
-    }
-
-    fun addRepoToFavorites(repoDetails: RepoDetails) {
-        repoDetails.favorite = true
+    fun handleRepoFavorites(repoDetails: RepoDetails) {
+        repoDetails.favorite = repoDetails.favorite != true
         val repo = with(repoDetails){Repo(
             id, name, owner, ownerAvatar, description, language, stargazersCount, forksCount, openIssuesCount, watchersCount, favorite
         )}
-        viewModelScope.launch(Dispatchers.IO) {
-            dbRepository.saveRepoToFavorites(repo)
-        }
-    }
-
-    fun removeRepoFromFavorites(repoDetails: RepoDetails) {
-        repoDetails.favorite = false
-        val repo = with(repoDetails){Repo(
-            id, name, owner, ownerAvatar, description, language, stargazersCount, forksCount, openIssuesCount, watchersCount, favorite
-        )}
-        viewModelScope.launch(Dispatchers.IO) {
-            dbRepository.deleteRepoFromFavorites(repo)
+        viewModelScope.launch {
+            if (repoDetails.favorite == true) {
+                dbRepository.saveRepoToFavorites(repo)
+            } else {
+                dbRepository.deleteRepoFromFavorites(repo)
+            }
         }
     }
 }

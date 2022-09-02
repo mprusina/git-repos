@@ -9,5 +9,5 @@ data class Contributor(
     @PrimaryKey @SerializedName("id") val id: Long,
     @SerializedName("login") val username: String? = null,
     @SerializedName("avatar_url") val profilePhotoUrl: String? = null,
-    var favorite: Boolean? = false
+    var favorite: Boolean = false
 )

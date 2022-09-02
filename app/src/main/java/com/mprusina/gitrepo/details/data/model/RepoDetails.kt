@@ -15,5 +15,5 @@ data class RepoDetails(
     val createdAt: String? = null,
     val updatedAt: String? = null,
     val htmlUrl: String? = null,
-    var favorite: Boolean? = false
+    var favorite: Boolean = false
 )

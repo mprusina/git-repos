@@ -42,7 +42,7 @@ class RepoListFragment : Fragment(), ReposContract.View {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentRepoListBinding.inflate(inflater, container, false)
-        repoAdapter = RepoPagingDataAdapter({openRepoDetails(it)}, {handleFavoriteAction(it)})
+        repoAdapter = RepoPagingDataAdapter(::openRepoDetails, ::handleFavoriteAction)
 
         binding.retryButton.setOnClickListener { repoAdapter.retry() }
 
@@ -117,8 +117,8 @@ class RepoListFragment : Fragment(), ReposContract.View {
         val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
 
-        binding.search.text?.trim().let { query ->
-            if (!query.isNullOrEmpty()) {
+        binding.search.text?.trim()?.let { query ->
+            if (query.isNotEmpty()) {
                 searchJob?.cancel()
                 searchJob = lifecycleScope.launch {
                     reposPresenter.searchRepos(query.toString()).collectLatest { searchData ->
@@ -150,11 +150,5 @@ class RepoListFragment : Fragment(), ReposContract.View {
         }
     }
 
-    override fun handleFavoriteAction(repo: Repo) {
-        if (repo.favorite == true) {
-            reposPresenter.removeFromFavorites(repo)
-        } else {
-            reposPresenter.saveToFavorites(repo)
-        }
-    }
+    override fun handleFavoriteAction(repo: Repo) = reposPresenter.handleRepoFavoriteAction(repo)
 }

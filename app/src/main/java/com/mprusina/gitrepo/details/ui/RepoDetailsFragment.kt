@@ -3,6 +3,7 @@ package com.mprusina.gitrepo.details.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -120,23 +121,7 @@ class RepoDetailsFragment : Fragment() {
                 binding.favorite.setOnClickListener { handleRepoFavoriteAction(repo) }
             }
         }
-        with(binding) {
-            profileImage.isVisible = show
-            ownerRepoName.isVisible = show
-            openRepoUrl.isVisible = show
-            defaultBranch.isVisible = show
-            language.isVisible = show
-            createdAt.isVisible = show
-            updatedAt.isVisible = show
-            description.isVisible = show
-            countsDivider.isVisible = show
-            startgazerCount.isVisible = show
-            forkCount.isVisible = show
-            openIssuesCount.isVisible = show
-            watcherCount.isVisible = show
-            favoriteDivider.isVisible = show
-            favorite.isVisible = show
-        }
+        binding.detailsContainer.isVisible = show
     }
 
     private fun showMessage(detailsError: Boolean = false, message: String? = null) {
@@ -155,21 +140,13 @@ class RepoDetailsFragment : Fragment() {
         binding.contributorListLoadingIndicator.isVisible = show
     }
 
-    private fun handleContributorFavoriteAction(contributor: Contributor) {
-        if (contributor.favorite == true) {
-            viewModel.removeContributorFromFavorites(contributor)
-        } else {
-            viewModel.addContributorToFavorites(contributor)
-        }
-    }
+    private fun handleContributorFavoriteAction(contributor: Contributor) = viewModel.handleContributorFavorites(contributor)
 
     private fun handleRepoFavoriteAction(repoDetails: RepoDetails) {
-        if (repoDetails.favorite == true) {
-            binding.favorite.setImageResource(R.drawable.favorite_no)
-            viewModel.removeRepoFromFavorites(repoDetails)
-        } else {
-            binding.favorite.setImageResource(R.drawable.favorite_yes)
-            viewModel.addRepoToFavorites(repoDetails)
+        when (repoDetails.favorite) {
+            true -> binding.favorite.setImageResource(R.drawable.favorite_no)
+            else -> binding.favorite.setImageResource(R.drawable.favorite_yes)
         }
+        viewModel.handleRepoFavorites(repoDetails)
     }
 }

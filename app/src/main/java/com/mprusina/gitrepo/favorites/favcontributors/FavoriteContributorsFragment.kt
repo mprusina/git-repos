@@ -54,7 +54,5 @@ class FavoriteContributorsFragment : Fragment() {
         binding.infoMessage.isVisible = show
     }
 
-    private fun handleContributorFavoriteAction(contributor: Contributor) {
-        viewModel.removeContributorFromFavorites(contributor)
-    }
+    private fun handleContributorFavoriteAction(contributor: Contributor) = viewModel.removeContributorFromFavorites(contributor)
 }

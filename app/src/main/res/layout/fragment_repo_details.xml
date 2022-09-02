@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".details.ui.RepoDetailsFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/details_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="64dp"
@@ -184,7 +192,7 @@
         style="@style/vertical_divider"
         android:layout_margin="8dp"
         android:background="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/list_divider"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/favorite"
         app:layout_constraintStart_toEndOf="@id/watcher_count"
         app:layout_constraintTop_toBottomOf="@id/counts_divider" />
@@ -199,10 +207,12 @@
         android:layout_marginBottom="8dp"
         android:drawablePadding="4dp"
         android:src="@drawable/favorite_no"
-        app:layout_constraintBottom_toTopOf="@id/list_divider"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/favorite_divider"
         app:layout_constraintTop_toBottomOf="@id/counts_divider" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/list_divider"
@@ -213,7 +223,7 @@
         android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/startgazer_count" />
+        app:layout_constraintTop_toBottomOf="@id/details_container" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contributors_list"

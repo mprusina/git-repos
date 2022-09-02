@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.mprusina.gitrepo.common.DatabaseRepository
 import com.mprusina.gitrepo.common.model.Repo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,7 +24,7 @@ class FavoriteReposViewModel @Inject constructor(private val dbRepository: Datab
     }
 
     fun removeRepoFromFavorites(repo: Repo) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             dbRepository.deleteRepoFromFavorites(repo)
         }
     }

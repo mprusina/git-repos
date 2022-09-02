@@ -29,6 +29,8 @@ class ContributorsListAdapter(private val onFavoriteClickListener: (Contributor)
             binding.contributorName.text = contributor.username
             if (contributor.favorite == true) {
                 favorite.setImageResource(R.drawable.favorite_yes)
+            } else {
+                favorite.setImageResource(R.drawable.favorite_no)
             }
             favorite.setOnClickListener {
                 if (contributor.favorite == true) {

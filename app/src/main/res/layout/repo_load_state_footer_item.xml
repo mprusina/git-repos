@@ -16,12 +16,19 @@
         android:textSize="24sp"
         tools:text="Timeout" />
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/loading_indicator"
-        style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:indeterminate="true" />
+
+<!--    <ProgressBar-->
+<!--        android:id="@+id/loading_indicator"-->
+<!--        style="?android:attr/progressBarStyle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center" />-->
 
     <Button
         android:id="@+id/retry_button"
