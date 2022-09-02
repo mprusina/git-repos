@@ -13,13 +13,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.mprusina.gitrepo.R
 import com.mprusina.gitrepo.common.model.Contributor
 import com.mprusina.gitrepo.databinding.FragmentRepoDetailsBinding
-import com.mprusina.gitrepo.details.ContributorsViewState
 import com.mprusina.gitrepo.details.RepoDetailsViewModel
 import com.mprusina.gitrepo.details.RepoDetailsViewState
 import com.mprusina.gitrepo.details.data.model.RepoDetails
@@ -31,7 +29,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RepoDetailsFragment : Fragment() {
 
-    private val args: RepoDetailsFragmentArgs by navArgs()
     private lateinit var binding: FragmentRepoDetailsBinding
     private val viewModel: RepoDetailsViewModel by viewModels()
     private lateinit var contributorsAdapter: ContributorsListAdapter
@@ -40,51 +37,34 @@ class RepoDetailsFragment : Fragment() {
         binding = FragmentRepoDetailsBinding.inflate(inflater, container, false)
         contributorsAdapter = ContributorsListAdapter { handleContributorFavoriteAction(it) }
 
-        with(binding.contributorsList) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = contributorsAdapter
-        }
-
-        viewModel.fetchRepoDetails(args.ownerName, args.repoName)
-        viewModel.fetchRepoContributors(args.ownerName, args.repoName)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        with(binding.contributorsList) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = contributorsAdapter
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.repoDetailsViewState.collectLatest { repoState ->
-                    when(repoState) {
+                viewModel.repoDetailsViewState.collectLatest { response ->
+                    when(response) {
                         is RepoDetailsViewState.Loading -> {
-                            showDetailsLoading(true)
+                            showDetailsUi(false)
+                            showLoading(true)
                         }
                         is RepoDetailsViewState.Error -> {
-                            showDetailsLoading(false)
-                            showMessage(true, repoState.error)
                             showDetailsUi(false)
+                            showLoading(false)
+                            showMessage(response.error)
                         }
                         is RepoDetailsViewState.Success -> {
-                            showDetailsLoading(false)
-                            showDetailsUi(true, repoState.repoDetails)
-
-                            viewModel.contributorsViewState.collectLatest { contributorState ->
-                                when(contributorState) {
-                                    is ContributorsViewState.Loading -> {
-                                        showContributorsLoading(true)
-                                    }
-                                    is ContributorsViewState.Error -> {
-                                        showContributorsLoading(false)
-                                        showMessage(message = contributorState.error)
-                                    }
-                                    is ContributorsViewState.Success -> {
-                                        showContributorsLoading(false)
-                                        contributorsAdapter.submitList(contributorState.contributors)
-                                    }
-                                }
-                            }
+                            showLoading(false)
+                            showDetailsUi(true, response.repoData.repo)
+                            contributorsAdapter.submitList(response.repoData.contributors)
                         }
                     }
                 }
@@ -115,7 +95,7 @@ class RepoDetailsFragment : Fragment() {
                 forkCount.text = repo.forksCount.toString()
                 openIssuesCount.text = repo.openIssuesCount.toString()
                 watcherCount.text = repo.watchersCount.toString()
-                if (repo.favorite == true) {
+                if (repo.favorite) {
                     binding.favorite.setImageResource(R.drawable.favorite_yes)
                 }
                 binding.favorite.setOnClickListener { handleRepoFavoriteAction(repo) }
@@ -124,20 +104,15 @@ class RepoDetailsFragment : Fragment() {
         binding.detailsContainer.isVisible = show
     }
 
-    private fun showMessage(detailsError: Boolean = false, message: String? = null) {
-        binding.listDivider.isVisible = !detailsError
+    private fun showMessage(message: String? = null) {
         if (!message.isNullOrEmpty()) {
             binding.infoMessage.text = message
         }
         binding.infoMessage.isVisible = true
     }
 
-    private fun showDetailsLoading(show: Boolean) {
+    private fun showLoading(show: Boolean) {
         binding.detailsLoadingIndicator.isVisible = show
-    }
-
-    private fun showContributorsLoading(show: Boolean) {
-        binding.contributorListLoadingIndicator.isVisible = show
     }
 
     private fun handleContributorFavoriteAction(contributor: Contributor) = viewModel.handleContributorFavorites(contributor)

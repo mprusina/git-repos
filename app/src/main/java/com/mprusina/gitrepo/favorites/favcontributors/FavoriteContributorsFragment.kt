@@ -25,16 +25,17 @@ class FavoriteContributorsFragment : Fragment() {
         binding = FragmentFavoriteContributorsListBinding.inflate(inflater, container, false)
         favContributorsListAdapter = FavoriteContributorsListAdapter { handleContributorFavoriteAction(it) }
 
-        with(binding.favContributorsList) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = favContributorsListAdapter
-        }
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        with(binding.favContributorsList) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = favContributorsListAdapter
+        }
+
         showLoading(true)
         viewModel.favContributors.observe(viewLifecycleOwner) { data ->
             showLoading(false)

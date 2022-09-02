@@ -44,6 +44,12 @@ class RepoListFragment : Fragment(), ReposContract.View {
         binding = FragmentRepoListBinding.inflate(inflater, container, false)
         repoAdapter = RepoPagingDataAdapter(::openRepoDetails, ::handleFavoriteAction)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.retryButton.setOnClickListener { repoAdapter.retry() }
 
         with(binding.reposList) {
@@ -63,8 +69,6 @@ class RepoListFragment : Fragment(), ReposContract.View {
 
         showRepos()
         initSearch()
-
-        return binding.root
     }
 
     override fun showRepos() {

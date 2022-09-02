@@ -29,11 +29,11 @@ class FavoriteContributorsListAdapter(
                 .centerCrop()
                 .into(binding.contributorProfileImage)
             binding.contributorName.text = contributor.username
-            if (contributor.favorite == true) {
+            if (contributor.favorite) {
                 favorite.setImageResource(R.drawable.favorite_yes)
             }
             favorite.setOnClickListener {
-                if (contributor.favorite == true) {
+                if (contributor.favorite) {
                     favorite.setImageResource(R.drawable.favorite_no)
                 } else {
                     favorite.setImageResource(R.drawable.favorite_yes)

@@ -9,10 +9,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/details_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
@@ -114,17 +115,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/updated_at" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/details_loading_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/counts_divider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <View
         android:id="@+id/counts_divider"
         style="@style/horizontal_divider"
@@ -192,7 +182,7 @@
         style="@style/vertical_divider"
         android:layout_margin="8dp"
         android:background="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/list_divider"
         app:layout_constraintEnd_toStartOf="@id/favorite"
         app:layout_constraintStart_toEndOf="@id/watcher_count"
         app:layout_constraintTop_toBottomOf="@id/counts_divider" />
@@ -207,12 +197,10 @@
         android:layout_marginBottom="8dp"
         android:drawablePadding="4dp"
         android:src="@drawable/favorite_no"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/list_divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/favorite_divider"
         app:layout_constraintTop_toBottomOf="@id/counts_divider" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/list_divider"
@@ -223,7 +211,7 @@
         android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/details_container" />
+        app:layout_constraintTop_toBottomOf="@id/startgazer_count" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contributors_list"
@@ -239,8 +227,10 @@
         app:layout_constraintTop_toBottomOf="@id/list_divider"
         tools:listitem="@layout/fragment_repo_details_list_row" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/contributor_list_loading_indicator"
+        android:id="@+id/details_loading_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
@@ -248,7 +238,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/list_divider"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/info_message"
@@ -262,6 +252,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/list_divider" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

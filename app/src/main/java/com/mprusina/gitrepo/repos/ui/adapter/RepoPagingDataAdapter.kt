@@ -35,14 +35,14 @@ class RepoPagingDataAdapter(
             forkCount.text = repo.forksCount.toString()
             openIssuesCount.text = repo.openIssuesCount.toString()
             watcherCount.text = repo.watchersCount.toString()
-            if (repo.favorite == true) {
+            if (repo.favorite) {
                 favorite.setImageResource(R.drawable.favorite_yes)
             } else {
                 favorite.setImageResource(R.drawable.favorite_no)
             }
             root.setOnClickListener { onItemClickListener(repo) }
             favorite.setOnClickListener {
-                if (repo.favorite == true) {
+                if (repo.favorite) {
                     favorite.setImageResource(R.drawable.favorite_no)
                 } else {
                     favorite.setImageResource(R.drawable.favorite_yes)

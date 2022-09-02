@@ -25,16 +25,17 @@ class FavoriteReposFragment : Fragment() {
         binding = FragmentFavoriteReposListBinding.inflate(inflater, container, false)
         favReposListAdapter = FavoriteReposListAdapter { handleRepoFavoriteAction(it) }
 
-        with(binding.favReposList) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = favReposListAdapter
-        }
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        with(binding.favReposList) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = favReposListAdapter
+        }
+
         showLoading(true)
         viewModel.favRepos.observe(viewLifecycleOwner) { data ->
             showLoading(false)

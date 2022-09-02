@@ -45,7 +45,7 @@ class RepoListPresenter @Inject constructor(private val dbRepository: DatabaseRe
         repo.favorite = repo.favorite != true
         runBlocking {
             launch {
-                if (repo.favorite == true) {
+                if (repo.favorite) {
                     dbRepository.saveRepoToFavorites(repo)
                 } else {
                     dbRepository.deleteRepoFromFavorites(repo)

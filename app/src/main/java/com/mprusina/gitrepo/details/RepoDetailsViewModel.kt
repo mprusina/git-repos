@@ -1,5 +1,6 @@
 package com.mprusina.gitrepo.details
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mprusina.gitrepo.common.DatabaseRepository
@@ -7,54 +8,56 @@ import com.mprusina.gitrepo.common.model.Contributor
 import com.mprusina.gitrepo.common.model.Repo
 import com.mprusina.gitrepo.details.data.GitHubRepository
 import com.mprusina.gitrepo.details.data.model.RepoDetails
+import com.mprusina.gitrepo.details.data.model.RepoDetailsResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RepoDetailsViewModel @Inject constructor(private val gitHubRepository: GitHubRepository, private val dbRepository: DatabaseRepository) : ViewModel() {
+class RepoDetailsViewModel @Inject constructor(private val gitHubRepository: GitHubRepository, private val dbRepository: DatabaseRepository, private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val _repoDetailsViewState = MutableStateFlow<RepoDetailsViewState>(RepoDetailsViewState.Loading)
     val repoDetailsViewState: StateFlow<RepoDetailsViewState> = _repoDetailsViewState
 
-    private val _contributorsViewState = MutableStateFlow<ContributorsViewState>(ContributorsViewState.Loading)
-    val contributorsViewState: StateFlow<ContributorsViewState> = _contributorsViewState
+    private val owner = savedStateHandle.get<String>("ownerName")
+    private val repo = savedStateHandle.get<String>("repoName")
 
-    fun fetchRepoDetails(owner: String, repo: String) {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                gitHubRepository.getRepoDetails(owner, repo)
-            }.onFailure {
-                _repoDetailsViewState.value = RepoDetailsViewState.Error(it.message)
-            }.onSuccess { repoDetails ->
-                val favReposList = dbRepository.getRepoList()
-                val favRepo = favReposList.find {
-                    it.id == repoDetails.id
-                }
-                repoDetails.favorite = favRepo?.favorite ?: false
-                _repoDetailsViewState.value = RepoDetailsViewState.Success(repoDetails)
-            }
-        }
+    init {
+        fetchDetailsData()
     }
 
-    fun fetchRepoContributors(owner: String, repo: String) {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                gitHubRepository.getContributors(owner, repo)
-            }.onFailure {
-                _contributorsViewState.value = ContributorsViewState.Error(it.message)
-            }.onSuccess { contributors ->
-                val favContributorsList = dbRepository.getContributorList()
-                favContributorsList.forEach{ dbContributor ->
-                    contributors.forEach {
-                        if (it.id == dbContributor.id) {
-                            it.favorite = true
+    private fun fetchDetailsData() {
+        if (!owner.isNullOrEmpty() && !repo.isNullOrEmpty()) {
+            viewModelScope.launch {
+                gitHubRepository.getRepoDetails(owner, repo)
+                    .zip(gitHubRepository.getContributors(owner, repo)) { details, contributors ->
+                        val favReposList = dbRepository.getRepoList()
+                        val favRepo = favReposList.find {
+                            it.id == details.id
                         }
+                        details.favorite = favRepo?.favorite ?: false
+
+                        val favContributorsList = dbRepository.getContributorList()
+                        favContributorsList.forEach{ dbContributor ->
+                            contributors.forEach {
+                                if (it.id == dbContributor.id) {
+                                    it.favorite = true
+                                }
+                            }
+                        }
+
+                        return@zip RepoDetailsResult(details, contributors)
                     }
-                }
-                _contributorsViewState.value = ContributorsViewState.Success(contributors)
+                    .catch { e ->
+                        _repoDetailsViewState.value = RepoDetailsViewState.Error(e.toString())
+                    }
+                    .collect {
+                        _repoDetailsViewState.value = RepoDetailsViewState.Success(it)
+                    }
             }
         }
     }
@@ -62,7 +65,7 @@ class RepoDetailsViewModel @Inject constructor(private val gitHubRepository: Git
     fun handleContributorFavorites(contributor: Contributor) {
         contributor.favorite = contributor.favorite != true
         viewModelScope.launch {
-            if (contributor.favorite == true) {
+            if (contributor.favorite) {
                 dbRepository.saveContributorToFavorites(contributor)
             } else {
                 dbRepository.deleteContributorFromFavorites(contributor)
@@ -76,7 +79,7 @@ class RepoDetailsViewModel @Inject constructor(private val gitHubRepository: Git
             id, name, owner, ownerAvatar, description, language, stargazersCount, forksCount, openIssuesCount, watchersCount, favorite
         )}
         viewModelScope.launch {
-            if (repoDetails.favorite == true) {
+            if (repoDetails.favorite) {
                 dbRepository.saveRepoToFavorites(repo)
             } else {
                 dbRepository.deleteRepoFromFavorites(repo)
@@ -88,11 +91,5 @@ class RepoDetailsViewModel @Inject constructor(private val gitHubRepository: Git
 sealed class RepoDetailsViewState {
     object Loading: RepoDetailsViewState()
     data class Error(val error: String?): RepoDetailsViewState()
-    data class Success(val repoDetails: RepoDetails): RepoDetailsViewState()
-}
-
-sealed class ContributorsViewState {
-    object Loading: ContributorsViewState()
-    data class Error(val error: String?): ContributorsViewState()
-    data class Success(val contributors: List<Contributor>): ContributorsViewState()
+    data class Success(val repoData: RepoDetailsResult): RepoDetailsViewState()
 }
