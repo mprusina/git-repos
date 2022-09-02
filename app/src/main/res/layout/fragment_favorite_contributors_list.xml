@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        tools:listitem="@layout/fragment_favorite_contributors_list_row"
+        tools:listitem="@layout/fragment_contributors_list_row"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
