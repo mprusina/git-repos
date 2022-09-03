@@ -7,8 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface ReposContract {
     interface View {
         fun showRepos()
-        fun initSearch()
-        fun searchRepos()
         fun showLoading(show: Boolean)
         fun showMessage(show: Boolean, message: String? = null)
         fun openRepoDetails(repo: Repo)

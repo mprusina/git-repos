@@ -6,31 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".repos.ui.RepoListFragment">
 
-    <EditText
-        android:id="@+id/search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:drawablePadding="8dp"
-        android:hint="@string/search_hint"
-        android:inputType="text"
-        android:maxLines="1"
-        android:imeOptions="actionSearch"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/repos_list"
+        android:id="@+id/repo_list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/fragment_repo_list_row" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -42,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/info_message"
@@ -55,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/retry_button"

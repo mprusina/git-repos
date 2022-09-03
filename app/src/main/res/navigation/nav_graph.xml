@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/navigation_repo_list"
         android:name="com.mprusina.gitrepo.repos.ui.RepoListFragment"
-        android:label="fragment_repo_list"
+        android:label="Repo List"
         tools:layout="@layout/fragment_repo_list" >
         <action
             android:id="@+id/action_repoListFragment_to_repoDetailsFragment"
@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/repoDetailsFragment"
         android:name="com.mprusina.gitrepo.details.ui.RepoDetailsFragment"
-        android:label="fragment_repo_details"
+        android:label="Repo Details"
         tools:layout="@layout/fragment_repo_details">
         <argument
             android:name="ownerName"
@@ -30,6 +30,6 @@
     <fragment
         android:id="@+id/navigation_favorites"
         android:name="com.mprusina.gitrepo.favorites.FavoritesFragment"
-        android:label="fragment_favorites"
+        android:label="Favorites"
         tools:layout="@layout/fragment_favorites" />
 </navigation>
